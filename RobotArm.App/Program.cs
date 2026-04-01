@@ -16,7 +16,8 @@ while (true)
     Console.Write("Z: ");
     double z = double.Parse(Console.ReadLine());
 
-    var target = new InverseKinematics.Vector3(x, y, z);
+    double xAdjusted = x - 1.5;
+    var target = new InverseKinematics.Vector3(xAdjusted, y, z);
     
     var angles = InverseKinematics.solve(target);
 
@@ -29,3 +30,4 @@ while (true)
 
     await client.SendServos(servo);
 }
+
