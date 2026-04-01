@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="RobotArm.API/RobotArm.API.csproj" />
+  <Project Path="RobotArm.App/RobotArm.App.csproj" />
+  <Project Path="RobotArm.Comms/RobotArm.Comms.csproj" />
+  <Project Path="RobotArm.Core/RobotArm.Core.fsproj" />
+  <Project Path="RobotArm.Domain/RobotArm.Domain.csproj" />
+</Solution>
