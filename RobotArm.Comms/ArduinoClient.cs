@@ -18,6 +18,9 @@ public class ArduinoClient
         await Send($"6:{s.S6}");
         await Send($"5:{s.S5}");
         await Send($"4:{s.S4}");
+        await Send($"3:{s.S3}");
+        await Send($"2:{s.S2}");
+        await Send($"1:{s.S1}");
     }
 
     private async Task Send(string msg)
