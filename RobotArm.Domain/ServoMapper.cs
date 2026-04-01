@@ -5,9 +5,9 @@ public static class ServoMapper
     static double Deg(double r) => r * 180.0 / Math.PI;
 
     // OFFSETS (AJUSTAR CON CALIBRACIÓN)
-    const int baseOffset = 87;
-    const int shoulderOffset = 102;
-    const int elbowOffset = 78;
+    const int baseOffset = 90;
+    const int shoulderOffset = 90;
+    const int elbowOffset = 90;
     const int wristYawOffset = 90;
     const int wristPitchOffset = 90;
 
@@ -17,8 +17,8 @@ public static class ServoMapper
         int shoulderServo = (int)(shoulderOffset - Deg(a.Shoulder));
         int elbowServo = (int)(elbowOffset + Deg(a.Elbow));
         int wristYaw = (int)(wristYawOffset + Deg(a.WristYaw));
-        int wristPitch = (int)(wristPitchOffset + Deg(a.WristPitch));
-        int grip = (int)(a.Grip);
+        int wristPitch = (int)(wristPitchOffset - Deg(a.WristPitch));
+        int grip = (int)a.Grip;
 
         return new ServoAngles
         {

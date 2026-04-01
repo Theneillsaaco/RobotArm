@@ -15,12 +15,8 @@ public class ArduinoClient
 
     public async Task SendServos(ServoAngles s)
     {
-        await Send($"6:{s.S6}");
-        await Send($"5:{s.S5}");
-        await Send($"4:{s.S4}");
-        await Send($"3:{s.S3}");
-        await Send($"2:{s.S2}");
-        await Send($"1:{s.S1}");
+        var msg = $"6:{s.S6},5:{s.S5},4:{s.S4},3:{s.S3},2:{s.S2},1:{s.S1}";
+        await Send(msg);
     }
 
     private async Task Send(string msg)
