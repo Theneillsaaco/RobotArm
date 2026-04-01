@@ -7,7 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.5"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\RobotArm.Domain\RobotArm.Domain.csproj" />
+      <ProjectReference Include="..\RobotArm.Core\RobotArm.Core.fsproj" />
+      <ProjectReference Include="..\RobotArm.Comms\RobotArm.Comms.csproj" />
     </ItemGroup>
 
 </Project>
