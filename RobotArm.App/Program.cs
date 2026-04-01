@@ -3,7 +3,7 @@ using RobotArm.Core;
 using RobotArm.Domain;
 
 var client = new ArduinoClient();
-await client.Connect("ws://10.0.0.39");
+await client.Connect("ws://10.0.0.35");
 
 await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=90, S2=90, S1=0 });
 await Task.Delay(2000);
@@ -65,9 +65,17 @@ while (true)
         grip
     );
 
+    var status = InverseKinematics.checkSingularity(target);
+    
+    if (status is InverseKinematics.ArmStatus.NearFullExtension ext)
+        Console.WriteLine($"Advertencia: brazo casi extendido ({ext.Item * 100:F1}% del alcance maximo");
+    else if (status is InverseKinematics.ArmStatus.NearSingularity sing)
+        Console.WriteLine($"Advertencia: cerca de singularidad (ratio = {sing.Item:F2})");
+    
     try
     {
-        var angles = InverseKinematics.solve(target);
+        var (angles, fkError) = InverseKinematics.solveVerified(target, 1);
+        
         var servo = ServoMapper.ToServo(new Angles
         {
             Base = angles.Base,
@@ -82,6 +90,7 @@ while (true)
         Console.WriteLine($"Shoulder:   {angles.Shoulder * 180.0 / Math.PI:F2}°");
         Console.WriteLine($"Elbow:      {angles.Elbow * 180.0 / Math.PI:F2}°");
         Console.WriteLine($"WristPitch: {angles.WristPitch * 180.0 / Math.PI:F2}°");
+        Console.WriteLine($"FK error:   {fkError:F4} mm");
         
         await client.SendServos(servo);
     }
