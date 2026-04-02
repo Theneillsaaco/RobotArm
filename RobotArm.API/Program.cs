@@ -12,6 +12,11 @@ builder.Services.AddSignalR(opts =>
     opts.MaximumReceiveMessageSize = 32 * 1024;
 });
 
+builder.Services.AddSingleton<ArduinoClient>();
+builder.Services.AddSingleton<RobotService>();
+
+builder.Services.AddHostedService<RobotConnectionService>();
+
 builder.Services.AddCors(opts =>
     opts.AddDefaultPolicy(p => 
         p.WithOrigins(
@@ -23,9 +28,6 @@ builder.Services.AddCors(opts =>
             .AllowCredentials()
     )
 );
-
-builder.Services.AddSingleton<ArduinoClient>();
-builder.Services.AddSingleton<RobotService>();
 
 // Add services to the container.
 var app = builder.Build();

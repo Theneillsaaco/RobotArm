@@ -26,7 +26,7 @@ public class RobotHub : Hub
                 await Clients.Caller.SendAsync("Warning", $"El brazo esta casi extendido ({ext.Item * 100:F1}%)");
             
             var (angles, fkError) = InverseKinematics.solveVerified(target, 1);
-            await _robot.SendAngles(angles);
+            await _robot.SendAngles(angles, cmd);
             
             await Clients.Caller.SendAsync("ArmState", new ArmStateDto
             {
