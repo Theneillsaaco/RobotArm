@@ -10,6 +10,7 @@ builder.Services.AddSignalR(opts =>
     opts.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
     opts.KeepAliveInterval = TimeSpan.FromSeconds(10);
     opts.MaximumReceiveMessageSize = 32 * 1024;
+    opts.EnableDetailedErrors = true;
 });
 
 builder.Services.AddSingleton<ArduinoClient>();
@@ -19,10 +20,7 @@ builder.Services.AddHostedService<RobotConnectionService>();
 
 builder.Services.AddCors(opts =>
     opts.AddDefaultPolicy(p => 
-        p.WithOrigins(
-                "http://localhost:4321",
-                "http://localhost:3000",
-                "http://localhost:5173")
+        p.SetIsOriginAllowed(_ => true)
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials()
@@ -32,6 +30,7 @@ builder.Services.AddCors(opts =>
 // Add services to the container.
 var app = builder.Build();
 
+app.UseWebSockets();
 app.UseCors();
 app.MapHub<RobotHub>("/hubs/robot");
 

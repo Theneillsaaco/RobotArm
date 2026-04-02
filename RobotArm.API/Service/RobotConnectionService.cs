@@ -7,7 +7,7 @@ public class RobotConnectionService : IHostedService
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         Console.WriteLine("Connecting to robot...");
-        await _client.Connect("ws://10.0.0.35");
+        await _client.Connect("ws://10.0.0.39");
         Console.WriteLine("Connected!");
     }
 

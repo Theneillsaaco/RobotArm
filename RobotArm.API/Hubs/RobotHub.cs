@@ -46,7 +46,7 @@ public class RobotHub : Hub
         }
     }
 
-    public async Task JoystickDetal(JoystickCommand delta)
+    public async Task JoystickDelta(JoystickCommand delta)
     {
         try
         {
