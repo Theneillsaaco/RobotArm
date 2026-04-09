@@ -17,7 +17,7 @@ public static class ServoMapper
         int shoulderServo = (int)(shoulderOffset - Deg(a.Shoulder));
         int elbowServo = (int)(elbowOffset + Deg(a.Elbow));
         int wristYaw = (int)(wristYawOffset + Deg(a.WristYaw));
-        int wristPitch = (int)(wristPitchOffset - Deg(a.WristPitch));
+        int wristPitch = (int)(wristPitchOffset + Deg(a.WristPitch));
         int grip = (int)a.Grip;
 
         return new ServoAngles

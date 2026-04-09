@@ -27,27 +27,29 @@ module InverseKinematics =
     let L3 = 8.5
     let Lw = 4.0
     let ROffset = 1.5
+    let groundOffset = 6.0
+    let shoulderHeight = groundOffset + L1
+
     
     // Cinematica Directa
     let forward (angle: Angle) : Vector3 =
-        let shoulderZ = L1
-        
-        let elbowR = L2 * cos angle.Shoulder
-        let elbowZ = shoulderZ + L2 * sin angle.Shoulder
+        let shoulderR = L2 * sin angle.Shoulder
+        let shoulderY = shoulderHeight + L2 * cos angle.Shoulder
         
         let forearmAngle = angle.Shoulder + angle.Elbow
-        let wristR = elbowR + L3 * cos forearmAngle
-        let wristZ = elbowZ + L3 * sin forearmAngle
+        let wristR = shoulderR + L3 * sin forearmAngle
+        let wristY = shoulderY + L3 * cos forearmAngle
         
         let totalR = wristR + Lw + ROffset
         
-        let x = totalR * sin angle.Base
-        let y = totalR * cos angle.Base
+        let x = totalR * cos angle.Base
+        let z = totalR * sin angle.Base
         
-        let pitchDeg = (angle.WristPitch + forearmAngle) * 180.0 / Math.PI
+        let pitchAbs = forearmAngle + angle.WristPitch
+        let pitchDeg = pitchAbs * 180.0 / Math.PI
         
         {
-            X = x; Y = y; Z = wristZ
+            X = x; Y = wristY; Z = z 
             Pitch = pitchDeg
             Yaw = angle.WristYaw
             Grip = angle.Grip
@@ -59,15 +61,17 @@ module InverseKinematics =
     
     let solve (target: Vector3) : Angle =
         let x = target.X
-        let y = target.Y
-        let zSafe = max (-L1 + 2.0) target.Z
-        let z = zSafe - L1
+        let z = target.Z
         
-        let r_total = sqrt (x**2.0 + y**2.0)
+        let minYworld = 1.0
+        let yWorld = max minYworld target.Y
+        let y = yWorld - shoulderHeight
+        
+        let r_total = sqrt (x**2.0 + z**2.0)
         let r = r_total - ROffset
         let r2 = r - Lw
         
-        let d = sqrt (r2**2.0 + z**2.0)
+        let d = sqrt (r2**2.0 + y**2.0)
         
         if d > (L2 + L3) then
             failwith "Punto fuera de alcance"
@@ -76,36 +80,34 @@ module InverseKinematics =
             failwith "Muy cerca"
             
         // Base
-        let theta0 = atan2 target.X target.Y
+        let clamp minVal maxVal value = 
+            max minVal (min maxVal value)
+        
+        let theta0Raw = atan2 target.Z target.X 
+        let theta0 = clamp (-Math.PI / 2.0) (Math.PI / 2.0) theta0Raw
         
         // Shoulder
         let cosTheta2 =
-            (r2**2.0 + z**2.0 - L2**2.0 - L3**2.0) /
+            (r2**2.0 + y**2.0 - L2**2.0 - L3**2.0) /
             (2.0 * L2 * L3)
             
         let theta2 = acos (max -1.0 (min 1.0 cosTheta2)) 
         
         // Elbow
-
         let theta1 =
-            atan2 z r2 -
+            atan2 r2 y -
             atan2 (L3 * sin theta2) (L2 + L3 * cos theta2)
-            
-        let theta1Safe = max (-Math.PI / 4.0) theta1
         
         // Muneca
-        let forearmAngle = theta1Safe + theta2
+        let forearmAngle = theta1 + theta2
         let wristPitch = (target.Pitch * Math.PI / 180.0) - forearmAngle
-            
-        // Rotacion muneca
-        let wristYaw = target.Yaw
-        
+  
         {
             Base = theta0
-            Shoulder = theta1Safe
+            Shoulder = theta1
             Elbow = theta2
             WristPitch = wristPitch
-            WristYaw = wristYaw
+            WristYaw = target.Yaw
             Grip = target.Grip
         }
         
@@ -144,7 +146,7 @@ module InverseKinematics =
     let checkSingularity (targer: Vector3) : ArmStatus =
         let x = targer.X
         let y = targer.Y
-        let z = max (-L1 + 2.0) targer.Z - L1
+        let z = max (L1 + 1.0) targer.Z - L1
         let r2 = sqrt (x**2.0 + y**2.0) - ROffset - Lw
         let d = sqrt (r2**2.0 + z**2.0)
         let maxD = L2 + L3

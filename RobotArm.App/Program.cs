@@ -3,7 +3,7 @@ using RobotArm.Core;
 using RobotArm.Domain;
 
 var client = new ArduinoClient();
-await client.Connect("ws://10.0.0.35");
+await client.Connect("ws://10.0.0.40");
 
 await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=90, S2=90, S1=0 });
 await Task.Delay(2000);
