@@ -3,61 +3,61 @@ using RobotArm.Core;
 using RobotArm.Domain;
 
 var client = new ArduinoClient();
-await client.Connect("ws://10.0.0.40");
+await client.Connect("ws://10.160.107.75");
 
 await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=90, S2=90, S1=0 });
 await Task.Delay(2000);
 
-await client.SendServos(new ServoAngles { S6=180, S5=90, S4=90, S3=90, S2=90, S1=0 });
-await Task.Delay(2000);
+// await client.SendServos(new ServoAngles { S6=180, S5=90, S4=90, S3=90, S2=90, S1=0 });
+// await Task.Delay(2000);
 
-await client.SendServos(new ServoAngles { S6=0, S5=90, S4=90, S3=90, S2=90, S1=0 });
-await Task.Delay(2000);
+// await client.SendServos(new ServoAngles { S6=0, S5=90, S4=90, S3=90, S2=90, S1=0 });
+// await Task.Delay(2000);
 
-await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=90, S2=90, S1=0 });
-await Task.Delay(3000);
+// await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=90, S2=90, S1=0 });
+// await Task.Delay(3000);
 
-// Prueba shoulder 
-await client.SendServos(new ServoAngles { S6=90, S5=180, S4=90, S3=90, S2=90, S1=0 });
-await Task.Delay(2000);
+// // Prueba shoulder 
+// await client.SendServos(new ServoAngles { S6=90, S5=180, S4=90, S3=90, S2=90, S1=0 });
+// await Task.Delay(2000);
 
-await client.SendServos(new ServoAngles { S6=90, S5=0, S4=90, S3=90, S2=90, S1=0 });
-await Task.Delay(2000);
+// await client.SendServos(new ServoAngles { S6=90, S5=0, S4=90, S3=90, S2=90, S1=0 });
+// await Task.Delay(2000);
 
-// Vuelve neutral
-await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=90, S2=90, S1=0 });
-await Task.Delay(3000);
+// // Vuelve neutral
+// await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=90, S2=90, S1=0 });
+// await Task.Delay(3000);
 
-// Prueba elbow 
-await client.SendServos(new ServoAngles { S6=90, S5=90, S4=180, S3=90, S2=90, S1=0 });
-await Task.Delay(2000);
+// // Prueba elbow 
+// await client.SendServos(new ServoAngles { S6=90, S5=90, S4=180, S3=90, S2=90, S1=0 });
+// await Task.Delay(2000);
 
-await client.SendServos(new ServoAngles { S6=90, S5=90, S4=0, S3=90, S2=90, S1=0 });
-await Task.Delay(2000);
+// await client.SendServos(new ServoAngles { S6=90, S5=90, S4=0, S3=90, S2=90, S1=0 });
+// await Task.Delay(2000);
 
-await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=90, S2=90, S1=0 });
-await Task.Delay(3000);
+// await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=90, S2=90, S1=0 });
+// await Task.Delay(3000);
 
-await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=0, S2=90, S1=0 });
-await Task.Delay(2000);
+// await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=0, S2=90, S1=0 });
+// await Task.Delay(2000);
 
-await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=180, S2=90, S1=0 });
-await Task.Delay(4000);
+// await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=180, S2=90, S1=0 });
+// await Task.Delay(4000);
 
-await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=90, S2=90, S1=0 });
-await Task.Delay(2000);
+// await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=90, S2=90, S1=0 });
+// await Task.Delay(2000);
 
-await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=90, S2=0, S1=0 });
-await Task.Delay(2000);
+// await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=90, S2=0, S1=0 });
+// await Task.Delay(2000);
 
-await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=90, S2=180, S1=0 });
-await Task.Delay(2000);
+// await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=90, S2=180, S1=0 });
+// await Task.Delay(2000);
 
-await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=90, S2=90, S1=110 });
-await Task.Delay(2000);
+// await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=90, S2=90, S1=110 });
+// await Task.Delay(2000);
 
-await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=90, S2=90, S1=50 });
-await Task.Delay(2000);
+// await client.SendServos(new ServoAngles { S6=90, S5=90, S4=90, S3=90, S2=90, S1=50 });
+// await Task.Delay(2000);
 
 while (true)
 {
