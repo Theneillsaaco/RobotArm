@@ -64,9 +64,9 @@ public class RobotHub : Hub
 
             var next = current with
             {
-                X = Math.Clamp(current.X + delta.Dx * delta.Speed, -15, 15),
-                Y = Math.Clamp(current.Y + delta.Dy * delta.Speed, -15, 15),
-                Z = Math.Clamp(current.Z + delta.Dz * delta.Speed, -4, 20),
+                X = Math.Clamp(current.X + delta.Dx * delta.Speed, -20, 20),
+                Y = Math.Clamp(current.Y + delta.Dy * delta.Speed, 0, 31),
+                Z = Math.Clamp(current.Z + delta.Dz * delta.Speed, -20, 20),
                 Pitch = Math.Clamp(current.Pitch + delta.DPich * delta.Speed, -90, 90),
                 Yaw = Math.Clamp(current.Yaw + delta.DYaw * delta.Speed, -90, 90),
                 Grip = Math.Clamp(current.Grip + delta.DGrip, 0, 110)
