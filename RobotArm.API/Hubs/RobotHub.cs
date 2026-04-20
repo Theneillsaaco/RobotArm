@@ -8,11 +8,17 @@ namespace RobotArm.API.Hubs;
 public class RobotHub : Hub
 {
     private readonly RobotService _robot;
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, SemaphoreSlim> _clientLocks = new();
     
     public RobotHub(RobotService robot) => _robot = robot;
 
     public async Task MoveToPosition(MoveCommand cmd)
     {
+        var clientLock = _clientLocks.GetOrAdd(Context.ConnectionId, _ => new SemaphoreSlim(1, 1));
+        
+        if (!await clientLock.WaitAsync(0))
+            return;
+        
         try
         {
             var target = new InverseKinematics.Vector3(
@@ -43,6 +49,10 @@ public class RobotHub : Hub
         catch (Exception ex)
         {
             await Clients.Caller.SendAsync("Error", ex.Message);
+        }
+        finally
+        {
+            clientLock.Release();
         }
     }
 
@@ -78,5 +88,12 @@ public class RobotHub : Hub
     {
         var pos = _robot.CurrentPosition();
         await Clients.Caller.SendAsync("CurrentPosition", pos);
+    }
+
+    public override Task OnDisconnectedAsync(Exception? exception)
+    {
+        if (_clientLocks.TryRemove(Context.ConnectionId, out var lk))
+            lk.Dispose();
+        return base.OnDisconnectedAsync(exception);
     }
 }

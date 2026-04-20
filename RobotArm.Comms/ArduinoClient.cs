@@ -6,11 +6,14 @@ namespace RobotArm.Comms;
 
 public class ArduinoClient
 {
-    private ClientWebSocket ws = new  ClientWebSocket();
+    private ClientWebSocket _ws = new  ClientWebSocket();
+    private string? _url;
+    private readonly SemaphoreSlim _sendLock = new(1, 1);
 
     public async Task Connect(string url)
     {
-        await ws.ConnectAsync(new Uri(url), CancellationToken.None);
+        _url = url;
+        await _ws.ConnectAsync(new Uri(url), CancellationToken.None);
     }
 
     public async Task SendServos(ServoAngles s)
@@ -21,7 +24,25 @@ public class ArduinoClient
 
     private async Task Send(string msg)
     {
-        var bytes = Encoding.UTF8.GetBytes(msg);
-        await ws.SendAsync(bytes, WebSocketMessageType.Text, true, CancellationToken.None);
+        await _sendLock.WaitAsync();
+
+        try
+        {
+            if (_ws.State != WebSocketState.Open)
+            {
+                Console.WriteLine($"[ArduinoClient] WebSocket state: {_ws.State}, reconnecting...");
+                _ws.Dispose();
+                _ws = new ClientWebSocket();
+                await _ws.ConnectAsync(new Uri(_url!), CancellationToken.None);
+                Console.WriteLine("[ArduinoClient] Reconnected.");
+            }
+
+            var bytes = Encoding.UTF8.GetBytes(msg);
+            await _ws.SendAsync(bytes, WebSocketMessageType.Text, true, CancellationToken.None);
+        }
+        finally
+        {
+            _sendLock.Release();
+        }
     }
 }
